@@ -1,0 +1,317 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مولّد أفكار الذكاء الاصطناعي</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Tahoma, Arial, sans-serif;
+      color: #f5f3ff;
+      background: #0b1020;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 22px 8%;
+      border-bottom: 1px solid #282747;
+      color: #c4b5fd;
+      font-weight: bold;
+    }
+
+    main {
+      width: min(760px, 90%);
+      margin: 65px auto;
+      text-align: center;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 30px;
+      background: #29234c;
+      color: #c4b5fd;
+      font-size: 13px;
+    }
+
+    h1 {
+      font-size: clamp(30px, 6vw, 48px);
+      line-height: 1.5;
+      margin: 20px 0 10px;
+    }
+
+    .intro {
+      color: #b8b8ce;
+      line-height: 1.9;
+    }
+
+    .panel {
+      background: #151a30;
+      border: 1px solid #343253;
+      border-radius: 20px;
+      padding: 25px;
+      margin-top: 30px;
+      text-align: right;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      color: #d8d5f0;
+    }
+
+    select, button {
+      font: inherit;
+      border-radius: 10px;
+      padding: 13px;
+    }
+
+    select {
+      width: 100%;
+      color: white;
+      background: #202641;
+      border: 1px solid #454267;
+      margin-bottom: 15px;
+    }
+
+    button {
+      cursor: pointer;
+      border: 0;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    button:hover { transform: translateY(-2px); }
+
+    .primary {
+      width: 100%;
+      background: #8b5cf6;
+      color: white;
+    }
+
+    .result {
+      display: none;
+      margin-top: 20px;
+      padding: 23px;
+      border-radius: 16px;
+      background: #20203d;
+      border: 1px solid #6652a4;
+      text-align: right;
+    }
+
+    .result h2 { color: #c4b5fd; }
+
+    .result p {
+      line-height: 1.9;
+      color: #deddf0;
+    }
+
+    .tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tool {
+      background: #343052;
+      color: #e6ddff;
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+
+    .secondary {
+      background: #373052;
+      color: white;
+      margin-top: 12px;
+      margin-left: 5px;
+    }
+
+    #message {
+      color: #86efac;
+      font-size: 14px;
+      min-height: 20px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #8889a6;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <header>✦ AI Ideas | أفكار المستقبل</header>
+
+  <main>
+    <span class="tag">مشروع تعليمي للمبتدئين</span>
+    <h1>فكرتك القادمة تبدأ من هنا 💡</h1>
+    <p class="intro">
+      محتار وش مشروعك القادم في الذكاء الاصطناعي؟
+      اختر مجالًا ودعنا نساعدك على اكتشاف فكرة جديدة.
+    </p>
+
+    <section class="panel">
+      <label for="category">اختر مجال المشروع:</label>
+      <select id="category">
+        <option value="all">جميع المجالات</option>
+        <option value="education">التعليم</option>
+        <option value="health">الصحة</option>
+        <option value="environment">البيئة</option>
+        <option value="technology">التقنية</option>
+      </select>
+
+      <button class="primary" onclick="generateIdea()">
+        ✨ اقترح لي فكرة مشروع
+      </button>
+
+      <article class="result" id="result" aria-live="polite">
+        <span class="tag" id="ideaCategory"></span>
+        <h2 id="ideaTitle"></h2>
+        <p id="ideaDescription"></p>
+        <strong>أدوات مقترحة للتنفيذ:</strong>
+        <div class="tools" id="ideaTools" style="margin-top:12px"></div>
+        <button class="secondary" onclick="copyIdea()">
+          نسخ الفكرة
+        </button>
+        <button class="secondary" onclick="generateIdea()">
+          فكرة أخرى ↻
+        </button>
+        <p id="message" aria-live="polite"></p>
+      </article>
+    </section>
+  </main>
+
+  <footer>صُنع للتعلّم والتجربة • AI Ideas 2026</footer>
+
+  <script>
+    const ideas = [
+      {
+        category: "education",
+        name: "مساعد المذاكرة الذكي",
+        description: "تطبيق يساعد الطلاب على تنظيم وقت المذاكرة وتقسيم الدروس إلى مهام صغيرة.",
+        tools: ["Python", "Streamlit", "AI APIs"]
+      },
+      {
+        category: "education",
+        name: "مولّد أسئلة تعليمية",
+        description: "أداة تحوّل محتوى الدرس إلى أسئلة قصيرة تساعد الطلاب على المراجعة.",
+        tools: ["Python", "NLP", "AI APIs"]
+      },
+      {
+        category: "health",
+        name: "منظّم العادات الصحية",
+        description: "تطبيق يتابع عادات النوم وشرب الماء والحركة ويعرض ملخصًا أسبوعيًا.",
+        tools: ["HTML", "CSS", "JavaScript"]
+      },
+      {
+        category: "health",
+        name: "مساعد التوعية الصحية",
+        description: "موقع يعرض معلومات صحية عامة موثوقة ويساعد المستخدم على اكتشاف مصادرها.",
+        tools: ["Python", "Web", "AI APIs"]
+      },
+      {
+        category: "environment",
+        name: "فرز النفايات الذكي",
+        description: "فكرة تطبيق يتعرّف على أنواع النفايات من الصور للمساعدة في إعادة التدوير.",
+        tools: ["Python", "Computer Vision"]
+      },
+      {
+        category: "environment",
+        name: "مرشد ترشيد الطاقة",
+        description: "أداة تحلل بيانات استهلاك الكهرباء وتقترح طرقًا لتقليل الهدر.",
+        tools: ["Python", "Data Analysis"]
+      },
+      {
+        category: "technology",
+        name: "مساعد كتابة الأكواد",
+        description: "أداة تعليمية تشرح أجزاء من الكود للمبتدئين وتقترح تحسينات بسيطة.",
+        tools: ["Python", "LLM APIs"]
+      },
+      {
+        category: "technology",
+        name: "مصنّف الرسائل",
+        description: "مشروع يدرّب نموذجًا بسيطًا لتمييز الرسائل المزعجة عن الرسائل العادية.",
+        tools: ["Python", "Machine Learning"]
+      }
+    ];
+
+    const categoryNames = {
+      education: "التعليم",
+      health: "الصحة",
+      environment: "البيئة",
+      technology: "التقنية"
+    };
+
+    let currentIdea = null;
+    let previousIndex = -1;
+
+    function generateIdea() {
+      const category = document.getElementById("category").value;
+      const filtered = ideas
+        .map((idea, index) => ({ idea, index }))
+        .filter(item =>
+          category === "all" || item.idea.category === category
+        );
+
+      if (filtered.length === 0) return;
+
+      let choices = filtered.filter(item =>
+        item.index !== previousIndex
+      );
+
+      if (choices.length === 0) choices = filtered;
+
+      const selected = choices[
+        Math.floor(Math.random() * choices.length)
+      ];
+
+      currentIdea = selected.idea;
+      previousIndex = selected.index;
+
+      document.getElementById("ideaCategory").textContent =
+        categoryNames[currentIdea.category];
+
+      document.getElementById("ideaTitle").textContent =
+        currentIdea.name;
+
+      document.getElementById("ideaDescription").textContent =
+        currentIdea.description;
+
+      const tools = document.getElementById("ideaTools");
+      tools.replaceChildren();
+
+      currentIdea.tools.forEach(name => {
+        const span = document.createElement("span");
+        span.className = "tool";
+        span.textContent = name;
+        tools.appendChild(span);
+      });
+
+      document.getElementById("message").textContent = "";
+      document.getElementById("result").style.display = "block";
+    }
+
+    async function copyIdea() {
+      if (!currentIdea) return;
+
+      const text = `${currentIdea.name}\n` +
+        `${currentIdea.description}\n` +
+        `الأدوات المقترحة: ${currentIdea.tools.join(", ")}`;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        document.getElementById("message").textContent =
+          "تم نسخ الفكرة بنجاح!";
+      } catch {
+        document.getElementById("message").textContent =
+          "تعذّر النسخ تلقائيًا. يمكنك نسخ النص يدويًا.";
+      }
+    }
+  </script>
+</body>
+</html>
